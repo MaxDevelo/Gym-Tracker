@@ -4,8 +4,24 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { openDatabaseSync,  } from "expo-sqlite";
+
 
 export default function HomeScreen() {
+  const db = openDatabaseSync('databaseName');
+  /*db.execSync(`
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intValue INTEGER);
+    INSERT INTO test (value, intValue) VALUES ('test1', 123);
+    INSERT INTO test (value, intValue) VALUES ('test2', 456);
+    INSERT INTO test (value, intValue) VALUES ('test3', 789);
+    `);
+    const result =  db.runSync('INSERT INTO test (value, intValue) VALUES (?, ?)', 'aaa', 100);*/
+    const data =  db.getAllSync('SELECT * FROM test');
+    data.forEach((val) => {
+      console.log(val.id, val.value, val.intValue);
+    });
+    
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -16,7 +32,7 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">Hello!</ThemedText>
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
